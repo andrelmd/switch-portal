@@ -1,1 +1,0 @@
-__NUXT_JSONP__("/ports", {data:[{}],fetch:{},mutations:void 0});
