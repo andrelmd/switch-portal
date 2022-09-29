@@ -1,36 +1,29 @@
 <template>
-  <div class="container mx-auto">
-    <div class="flex items-center justify-between">
-      <h1 class="font-bold text-2xl">Dispositivos</h1>
-    </div>
-    <div name="device-table-wrapper">
-      <table
-        v-show="!$fetch.pending"
-        name="device-table"
-        class="mt-4 min-w-full divide-y divide-gray-200 shadow"
-      >
-        <thead class="bg-gray-50">
+  <div>
+    <h1>Dispositivos</h1>
+    <div>
+      <table v-show="!$fetch.pending" name="device-table">
+        <thead>
           <tr>
-            <th scope="col" class="relative px-6 py-3">ID</th>
-            <th scope="col" class="relative px-6 py-3">Endereço IP</th>
-            <th scope="col" class="relative px-6 py-3">Ultima atualização</th>
+            <th scope="col">ID</th>
+            <th scope="col">Endereço IP</th>
+            <th scope="col">Ultima atualização</th>
           </tr>
         </thead>
 
-        <tbody class="bg-white divide-y divide-gray-200">
+        <tbody>
           <tr
             v-for="device in devices"
             :key="device.id"
-            class="bg-white hover:bg-gray-200"
             @click="goToPortsBySwitchId(device.id)"
           >
-            <th class="px-6 py-4 text-center text-sm font-medium text-gray-900">
+            <th>
               {{ device.id }}
             </th>
-            <td class="px-6 py-4 text-center text-sm font-medium text-gray-900">
+            <td>
               {{ device.ipAddress }}
             </td>
-            <td class="px-6 py-4 text-center text-sm font-medium text-gray-900">
+            <td>
               {{ device.updatedAt.toLocaleString() }}
             </td>
           </tr>
@@ -42,16 +35,16 @@
 
 <script lang="ts">
 import { AxiosStatic } from 'axios'
+import Vue from 'vue'
 import { DeviceDto } from '../../dtos/DeviceDto'
 
-export default {
-  name: 'devices',
+export default Vue.extend({
+  name: 'DevicePage',
   data() {
     return {
       devices: Array<DeviceDto>(),
     }
   },
-
   async fetch() {
     const { $axios }: { $axios: AxiosStatic } = this.$nuxt.context
     $axios
@@ -62,16 +55,15 @@ export default {
       })
       .then((response) => {
         this.devices = response.data.data.map(
-          (rawData) => new DeviceDto(rawData),
+          (rawData) => new DeviceDto(rawData)
         )
       })
   },
   fetchOnServer: false,
   methods: {
     goToPortsBySwitchId(id: number) {
-      const context = this.$nuxt.context
-      context.redirect(`/ports/${id}`)
+      this.$nuxt.context.redirect(`/devices/${id}`)
     },
   },
-}
+})
 </script>

@@ -5,10 +5,9 @@ export default {
     port: 3000,
     host: '0.0.0.0',
   },
-
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'switch-portal',
+    title: 'switch-portal2',
     htmlAttrs: {
       lang: 'pt-BR',
     },
@@ -18,7 +17,7 @@ export default {
       { hid: 'description', name: 'description', content: '' },
       { name: 'format-detection', content: 'telephone=no' },
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/sp.jpeg' }],
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/icon.png' }],
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -34,8 +33,6 @@ export default {
   buildModules: [
     // https://go.nuxtjs.dev/typescript
     '@nuxt/typescript-build',
-    // https://go.nuxtjs.dev/tailwindcss
-    '@nuxtjs/tailwindcss',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -47,10 +44,7 @@ export default {
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    baseURL:
-      process.env.DEV === 'true'
-        ? process.env.SWITCH_API_URL
-        : process.env.SWITCH_API_PROD_URL,
+    baseURL: process.env.SWITCH_API_BASE_URL,
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build

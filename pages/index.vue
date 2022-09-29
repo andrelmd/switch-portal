@@ -1,5 +1,5 @@
 <template>
-  <NuxtRedirect to="/switches"></NuxtRedirect>
+  <div></div>
 </template>
 
 <script lang="ts">
@@ -7,8 +7,12 @@ import Vue from 'vue'
 
 export default Vue.extend({
   name: 'IndexPage',
-  middleware(context) {
-    return context.redirect('/devices')
-  },
 })
 </script>
+
+<style global>
+* a {
+  text-decoration: none;
+  color: white;
+}
+</style>

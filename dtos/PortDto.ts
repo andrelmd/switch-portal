@@ -4,12 +4,13 @@ export class PortDto {
   statusId: number
   speedId: number
   flowControlId: number
-  private constructor(
+
+  constructor(
     switchId: number,
     number: number,
     statusId: number,
     speedId: number,
-    flowControlId: number,
+    flowControlId: number
   ) {
     this.deviceId = switchId
     this.number = number
