@@ -7,12 +7,14 @@ import Vue from 'vue'
 
 export default Vue.extend({
   name: 'IndexPage',
+  middleware: (context) => {
+    context.redirect(`/devices`)
+  },
 })
 </script>
 
 <style global>
-* a {
-  text-decoration: none;
-  color: white;
+body {
+  margin: 0;
 }
 </style>

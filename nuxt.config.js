@@ -1,10 +1,13 @@
 export default {
   // Target: https://go.nuxtjs.dev/config-target
   target: 'static',
-  server: {
-    port: 3000,
-    host: '0.0.0.0',
-  },
+  server:
+    process.env.ON_RASP === 'true'
+      ? {
+          port: 3000,
+          host: '0.0.0.0',
+        }
+      : undefined,
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     title: 'switch-portal2',
@@ -39,12 +42,16 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    '@nuxtjs/tailwindcss',
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    baseURL: process.env.SWITCH_API_BASE_URL,
+    baseURL:
+      process.env.ON_RASP === 'true'
+        ? process.env.SWITCH_API_RASP_BASE_URL
+        : process.env.SWITCH_API_BASE_URL,
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build

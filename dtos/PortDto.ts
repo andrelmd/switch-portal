@@ -10,7 +10,7 @@ export class PortDto {
     number: number,
     statusId: number,
     speedId: number,
-    flowControlId: number
+    flowControlId: number,
   ) {
     this.deviceId = switchId
     this.number = number
