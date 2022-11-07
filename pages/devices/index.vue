@@ -60,7 +60,7 @@ export default Vue.extend({
       })
       .then((response) => {
         this.devices = response.data.data.map(
-          (rawData) => new DeviceDto(rawData),
+          (rawData) => DeviceDto.fromRawDeviceDto(rawData),
         )
       })
   },
@@ -73,7 +73,7 @@ export default Vue.extend({
       this.$nuxt.context.redirect(`/devices/create`)
     },
     handleRowClick(rowIndex: number) {
-      this.goToPortsBySwitchId(this.devices[rowIndex].id)
+     this.goToPortsBySwitchId(this.devices[rowIndex].id!)
     },
   },
   components: { DefaultButton },

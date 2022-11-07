@@ -1,9 +1,15 @@
 <template>
   <div class="flex justify-center w-full">
     <div class="wrapper w-1/2 mt-12">
-      <div>
-        <h1 class="text-3xl">Portas do switch {{ id }}</h1>
-        <div></div>
+      <div class="flex flex-direction-row w-full justify-between">
+        <div>
+          <h1 class="text-3xl">Portas do switch {{ id }}</h1>
+        </div>
+        <div>
+          <DefaultButton :onClick="deleteDevice">
+            Deletar dispositivo
+          </DefaultButton>
+        </div>
       </div>
       <div class="w-full bg-slate-700 min-h-16 rounded-lg text-slate-100 mt-8">
         <table
@@ -67,7 +73,11 @@
               </td>
               <td class="py-4">
                 <button
-                  class="bg-emerald-500 rounded-lg p-2"
+                  :class="
+                    loading
+                      ? 'bg-red-500 rounded-lg p-2'
+                      : 'bg-emerald-500 rounded-lg p-2'
+                  "
                   @click="updatePort(port.number)"
                 >
                   Atualizar
@@ -85,6 +95,7 @@
 import { AxiosStatic } from 'axios'
 import Vue from 'vue'
 import DefaultTable from '../../components/DefaultTable.vue'
+import DefaultButton from '~/components/DefaultButton.vue'
 import { PortDto } from '../../dtos/PortDto'
 
 interface StatusDTO {
@@ -114,6 +125,7 @@ export default Vue.extend({
       status: Array<StatusDTO>(),
       speeds: Array<SpeedDTO>(),
       flowControls: Array<FlowControl>(),
+      loading: false,
     }
   },
   async fetch() {
@@ -125,76 +137,45 @@ export default Vue.extend({
   fetchOnServer: false,
   methods: {
     async getPorts() {
-      const {
-        $axios,
-      }: {
-        $axios: AxiosStatic
-      } = this.$nuxt.context
+      const { $axios }: { $axios: AxiosStatic } = this.$nuxt.context
       $axios
-        .get<{
-          data: Array<PortDto>
-        }>(`/ports/${this.id}`, {
-          headers: {
-            'Cache-Control': 'no-cache',
-          },
+        .get<{ data: Array<PortDto> }>(`/ports/${this.id}`, {
+          headers: { 'Cache-Control': 'no-cache' },
         })
-        .then((response) => {
-          this.ports = response.data.data
-        })
+        .then((response) => (this.ports = response.data.data))
     },
     async getStatus() {
-      const {
-        $axios,
-      }: {
-        $axios: AxiosStatic
-      } = this.$nuxt.context
+      const { $axios }: { $axios: AxiosStatic } = this.$nuxt.context
       $axios
-        .get<{
-          data: Array<StatusDTO>
-        }>('/ports/states')
-        .then((response) => {
-          this.status = response.data.data
-        })
+        .get<{ data: Array<StatusDTO> }>('/ports/states')
+        .then((response) => (this.status = response.data.data))
     },
     async getSpeeds() {
-      const {
-        $axios,
-      }: {
-        $axios: AxiosStatic
-      } = this.$nuxt.context
+      const { $axios }: { $axios: AxiosStatic } = this.$nuxt.context
       $axios
-        .get<{
-          data: Array<SpeedDTO>
-        }>('/ports/speeds')
-        .then((response) => {
-          this.speeds = response.data.data
-        })
+        .get<{ data: Array<SpeedDTO> }>('/ports/speeds')
+        .then((response) => (this.speeds = response.data.data))
     },
     async getFlowControl() {
-      const {
-        $axios,
-      }: {
-        $axios: AxiosStatic
-      } = this.$nuxt.context
+      const { $axios }: { $axios: AxiosStatic } = this.$nuxt.context
       $axios
-        .get<{
-          data: Array<FlowControl>
-        }>('/ports/flow-control')
-        .then((response) => {
-          this.flowControls = response.data.data
-        })
+        .get<{ data: Array<FlowControl> }>('/ports/flow-control')
+        .then((response) => (this.flowControls = response.data.data))
     },
     async updatePort(portNumber: number) {
-      const {
-        $axios,
-      }: {
-        $axios: AxiosStatic
-      } = this.$nuxt.context
+      this.loading = true
+      const { $axios }: { $axios: AxiosStatic } = this.$nuxt.context
       await $axios.patch(
         '/ports',
         this.ports.find((it) => it.number === portNumber),
       )
-      await this.getPorts()
+      await this.getPorts().then(() => (this.loading = false))
+    },
+    async deleteDevice() {
+      const { $axios }: { $axios: AxiosStatic } = this.$nuxt.context
+      $axios
+        .delete(`/devices/${this.id}`)
+        .then(() => this.$nuxt.context.redirect(`/devices`))
     },
   },
 
