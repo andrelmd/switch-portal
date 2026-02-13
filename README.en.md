@@ -86,7 +86,7 @@ src/
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
+git clone https://github.com/andrelmd/switch-portal
 cd switch-portal
 ```
 
